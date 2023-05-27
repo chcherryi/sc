@@ -1,0 +1,66 @@
+Set up a new Rust project: Create a new Rust project using Cargo, Rust's build system and package manager. Open a terminal and execute the following command:
+
+bash
+Copy code
+cargo new my_smart_contract
+This will create a new directory named my_smart_contract with the basic structure of a Rust project.
+
+Add the ink! dependencies: Open the Cargo.toml file in the my_smart_contract directory and add the following dependencies under the [dependencies] section:
+
+toml
+Copy code
+ink_lang = "2.2"
+ink_storage = "2.2"
+Save the file.
+
+Implement the smart contract: Open the src/lib.rs file in the my_smart_contract directory and replace its contents with the following code:
+
+rust
+Copy code
+use ink_lang::contract;
+
+#[contract]
+mod my_contract {
+    #[ink(storage)]
+    pub struct MyContract {
+        value: u32,
+    }
+
+    impl MyContract {
+        #[ink(constructor)]
+        pub fn new(init_value: u32) -> Self {
+            Self { value: init_value }
+        }
+
+        #[ink(message)]
+        pub fn get_value(&self) -> u32 {
+            self.value
+        }
+
+        #[ink(message)]
+        pub fn set_value(&mut self, new_value: u32) {
+            self.value = new_value;
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn test_my_contract() {
+            let mut contract = MyContract::new(42);
+            assert_eq!(contract.get_value(), 42);
+            contract.set_value(10);
+            assert_eq!(contract.get_value(), 10);
+        }
+    }
+}
+This code defines a simple smart contract named MyContract that has a single state variable value of type u32. It provides a constructor to initialize the value and two messages (get_value and set_value) to retrieve and update the value respectively.
+
+Build and test the smart contract: Open a terminal, navigate to the my_smart_contract directory, and execute the following command to build and test the smart contract:
+
+bash
+Copy code
+cargo test
+This command will compile the smart contract and run the test case defined in the tests module.
